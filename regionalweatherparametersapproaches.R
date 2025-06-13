@@ -12,28 +12,22 @@ library(dplyr)
 library(purrr)
 library(stringr)
 
-theme_malaria_archetype <- function(base_size = 80) {
-  theme_minimal(base_size = base_size) +
+theme_malaria_archetype <- function() {
+  theme_minimal(base_size = 14) +
     theme(
-      plot.title = element_text(size = base_size + 20, hjust = 0.5, face = "plain", colour = "black"),
-      plot.subtitle = element_text(size = base_size, hjust = 0.5, face = "italic", colour = "gray40"),
-      plot.caption = element_text(size = base_size - 20, hjust = 0, face = "italic", colour = "gray30", margin = margin(t = 10)),
-      
-      axis.title = element_text(size = base_size, face = "bold"),
-      axis.text = element_text(size = base_size - 20),
-      axis.line = element_line(colour = "black", linewidth = 8),
-      axis.ticks = element_line(colour = "black"),
-      axis.ticks.length = unit(5, "pt"),
-      
-      panel.grid.major = element_line(colour = "grey80", linewidth = 5),
-      panel.grid.minor = element_line(colour = "grey90", linewidth = 3),
-      
-      legend.title = element_text(size = base_size - 10, face = "bold"),
-      legend.text = element_text(size = base_size - 20),
-      
-      strip.text = element_text(size = base_size - 10, face = "bold", colour = "black"),
-      panel.spacing = unit(1, "lines"),
-      plot.margin = margin(10, 10, 10, 10)
+      plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+      plot.subtitle = element_text(size = 16, hjust = 0.5),
+      plot.caption = element_text(size = 10, hjust = 0),
+      axis.title = element_text(size = 14, face = "bold"),
+      axis.text = element_text(size = 12),
+      legend.title = element_text(size = 14, face = "bold"),
+      legend.text = element_text(size = 12),
+      legend.key.height = unit(1.5, "cm"),
+      legend.key.width = unit(0.6, "cm"),
+      panel.grid.major = element_line(color = "grey80"),
+      panel.grid.minor = element_blank(),
+      strip.text = element_text(size = 13, face = "bold"),
+      strip.background = element_rect(fill = "grey90", color = NA)
     )
 }
 
@@ -823,7 +817,7 @@ plot_s_t <- Sys.time()
 A_plot <- full_long_data %>%
   filter(approach == "A") %>%
   ggplot(aes(x = temperature, y = value, color = parameter)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   facet_wrap(~parameter, scales = "free_y") +
   labs(
     title = "Temperature dependence of transmission parameters used in Approach A",
@@ -839,7 +833,7 @@ A_plot <- full_long_data %>%
 B_plot <- full_long_data %>%
   filter(approach == "B", !parameter %in% c("kappa_e_B", "kappa_l_B", "kappa_p_B")) %>%
   ggplot(aes(x = temperature, y = value, color = parameter)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   facet_wrap(~parameter, scales = "free_y") +
   labs(
     title = "Temperature dependence of transmission parameters used in Approach B",
@@ -856,7 +850,7 @@ B_plot <- full_long_data %>%
 C_plot <- full_long_data %>%
   filter(approach == "C", !parameter %in% c("K_e_C", "kappa_e_C", "kappa_l_C", "kappa_p_C")) %>%
   ggplot(aes(x = temperature, y = value, color = parameter)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   facet_wrap(~parameter, scales = "free_y") +
   labs(
     title = "Temperature dependence of transmission parameters used in Approach C",
@@ -889,8 +883,7 @@ C_surface_cap_plot <- ggplot(C_surface_params %>% filter(parameter == "K_e_C"), 
       "Oct;2018:3143950. This plot shows how the value of the carrying capacity responds to temperature and rainfall under Approach C."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(2, "cm"))
+  theme_malaria_archetype() 
 
 C_surface_dev_plot <- ggplot(C_surface_params %>% filter(parameter != "K_e_C"), aes(x = temperature, y = rainfall, fill = value)) +
   geom_raster(interpolate = TRUE) +
@@ -906,12 +899,11 @@ C_surface_dev_plot <- ggplot(C_surface_params %>% filter(parameter != "K_e_C"), 
       "Oct;2018:3143950. This plot shows how egg, larvae and pupae development rates respond to temperature and rainfall under Approach C."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(2, "cm"))
+  theme_malaria_archetype()
 
 # Plot weather parameters
 A_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "A"), aes(x = time, y = value, color = name)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   scale_x_continuous(
     breaks = seq(0, max(output$time), by = 365),
     labels = start_year + seq(0, (max(output$time) %/% 365), 1)
@@ -931,7 +923,7 @@ A_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "A"), aes(x = 
   theme(legend.position = "none")
 
 B_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "B"), aes(x = time, y = value, color = name)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   scale_x_continuous(
     breaks = seq(0, max(output$time), by = 365),
     labels = start_year + seq(0, (max(output$time) %/% 365), 1)
@@ -951,7 +943,7 @@ B_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "B"), aes(x = 
   theme(legend.position = "none")
 
 C_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "C"), aes(x = time, y = value, color = name)) +
-  geom_line(linewidth = 8) +
+  geom_line(linewidth = 2) +
   scale_x_continuous(
     breaks = seq(0, max(output$time), by = 365),
     labels = start_year + seq(0, (max(output$time) %/% 365), 1)
@@ -972,8 +964,8 @@ C_parms_plots <- ggplot(tidy_plot_data %>% filter(mod_approach == "C"), aes(x = 
 
 # temperature
 monthly_temperature <- ggplot() +
-  geom_point(data = filter(temps_values, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), size = 16) +
-  geom_line(data = filter(approx_temps_values_long, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), linewidth = 8) +
+  geom_point(data = filter(temps_values, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), size = 4) +
+  geom_line(data = filter(approx_temps_values_long, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), linewidth = 2) +
   scale_x_continuous(
     breaks = seq(0, max(output$time), by = 365),
     labels = start_year + seq(0, (max(output$time) %/% 365), 1)
@@ -991,8 +983,8 @@ monthly_temperature <- ggplot() +
 
 # rainfall
 monthly_rainfall <- ggplot() +
-  geom_point(data = filter(rains_values, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), size = 16) +
-  geom_line(data = filter(approx_rains_values_long, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), linewidth = 8) +
+  geom_point(data = filter(rains_values, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), size = 4) +
+  geom_line(data = filter(approx_rains_values_long, time >= 365*skip_yrs, time <= 365*no_yrs), aes(x = time, y = value, colour = name), linewidth = 2) +
   scale_x_continuous(
     breaks = seq(0, max(output$time), by = 365),
     labels = start_year + seq(0, (max(output$time) %/% 365), 1)
@@ -1012,7 +1004,7 @@ monthly_rainfall <- ggplot() +
 aquatic_mosquitoes <- output %>% 
   filter(time >= 365*skip_yrs, state_var %in% c("E_a", "L_a", "P_a")) %>% 
   ggplot() +
-  geom_line(aes(x = time, y = value, colour = as_factor(state_var), linetype = scenario), linewidth = 3) +
+  geom_line(aes(x = time, y = value, colour = as_factor(state_var), linetype = scenario), linewidth = 2) +
   facet_grid(rows = vars(approach), cols = vars(patch), scales = "free") +
   scale_y_continuous(
     limits = c(0, NA),
@@ -1034,13 +1026,12 @@ aquatic_mosquitoes <- output %>%
       "reflecting robust and regularized trends in the simulated aquatic mosquito dynamics. Population values are scaled to millions."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(5, "cm"))
+  theme_malaria_archetype() 
 
 adult_mosquitoes <- output %>% 
   filter(time >= 365*skip_yrs, state_var %in% c("I_m")) %>% 
   ggplot() +
-  geom_line(aes(x = time, y = value, linetype = as_factor(state_var), colour = scenario), linewidth = 5) +
+  geom_line(aes(x = time, y = value, linetype = as_factor(state_var), colour = scenario), linewidth = 2) +
   facet_grid(cols = vars(approach), rows = vars(patch), scales = "free") +
   scale_y_continuous(
     limits = c(0, NA),
@@ -1062,14 +1053,13 @@ adult_mosquitoes <- output %>%
       "and the reduction is influenced by vector control coverage ranging from 25% to 90%. Values are scaled to millions."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(5, "cm"))
+  theme_malaria_archetype() 
 
 # host populations
 human_hosts <- output %>% 
   filter(time >= 365*skip_yrs, state_var %in% c("A_h", "Iu_h")) %>% 
   ggplot() +
-  geom_line(aes(x = time, y = value, linetype = as_factor(state_var), colour = scenario), linewidth = 5) +
+  geom_line(aes(x = time, y = value, linetype = as_factor(state_var), colour = scenario), linewidth = 2) +
   facet_grid(cols = vars(approach), rows = vars(patch), scales = "free") +
   scale_y_continuous(
     limits = c(0, NA),
@@ -1093,13 +1083,12 @@ human_hosts <- output %>%
       "the reduction is influenced by vector control. Values are scaled to thousands."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(5, "cm"))
+  theme_malaria_archetype() 
 
 daily_incidence <- output %>%
   filter(time >= 365*skip_yrs, state_var == "Inc") %>%
   ggplot() +
-  geom_line(aes(x = time, y = value, colour = as_factor(scenario)), linewidth = 4) +
+  geom_line(aes(x = time, y = value, colour = as_factor(scenario)), linewidth = 2) +
   facet_grid(cols = vars(approach), rows = vars(patch), scales = "free") +
   scale_y_continuous(
     limits = c(0, NA),
@@ -1121,13 +1110,12 @@ daily_incidence <- output %>%
       "incidence. Clinical malaria incidence is expressed as cases per 1 000 population."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(5, "cm"))
+  theme_malaria_archetype() 
 
 line_annual_incidence <- annual_incidence %>%
   filter(time > 0) %>%
   ggplot() +
-  geom_line(aes(x = start_year+time, y = annual_value, colour = as_factor(scenario)), linewidth = 4) +
+  geom_line(aes(x = start_year+time, y = annual_value, colour = as_factor(scenario)), linewidth = 2) +
   facet_grid(cols = vars(approach), rows = vars(name), scales = "free") +
   scale_y_continuous(
     limits = c(0, NA),
@@ -1146,8 +1134,7 @@ line_annual_incidence <- annual_incidence %>%
       "incidence is expressed as cases per 100 000 population."
     )
   ) +
-  theme_malaria_archetype() +
-  theme(legend.key.height = unit(5, "cm"), legend.key.width = unit(5, "cm"))
+  theme_malaria_archetype() 
 
 output_plots <- list(
   "Monthly_Temperature" = monthly_temperature,
