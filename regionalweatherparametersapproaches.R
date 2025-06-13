@@ -1163,7 +1163,7 @@ plot_e_t <- Sys.time()
 
 total_e_t <- Sys.time()
 
-# print plots
+# print plots (save/export images with width = 6410 and height = 5346 for best view)
 A_plot
 B_plot
 C_plot
