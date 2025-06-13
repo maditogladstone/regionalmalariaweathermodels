@@ -26,11 +26,10 @@ Annual cummulative incidence predicted for each approach are determined using th
 
 The following plots are generated from model outputs:
 
-1. Mean monthly temperature/rainfall trends 
-2. Aquatic (eggs, larvae, and pupae) mosquito populations in all approaches (columns) across climate regions (rows)
-3. Adult (susceptible, exposed, and infectious) mosquito populations in all approaches (columns) across climate regions (rows)
-4. Human (susceptible, exposed, asymptomatic, mild symptomatic, severe symptomatic, treated mild cases, treated severe cases, and recovered) populations predicted in all approaches (columns) across climate regions (rows)
-5/6. Daily/Annual malaria incidence predicted in all approaches (columns) across climate regions (rows)
+1. Aquatic (eggs, larvae, and pupae) mosquito populations in all approaches (rows) across climate regions (columns)
+2. Adult infectious mosquito populations in all approaches (columns) across climate regions (rows)
+3. Human asymptomatic and mild symptomatic populations predicted in all approaches (columns) across climate regions (rows)
+4/5. Daily/Annual malaria incidence predicted in all approaches (columns) across climate regions (rows)
 
 # comments
 
