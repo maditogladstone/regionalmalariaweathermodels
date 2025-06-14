@@ -1,4 +1,4 @@
-Run the whole regionalweatherapproaches.R script to generate simulation output images. This process takes **approximately 57 minutes** to generate images. The duration of each phase in the process are provided at the end of the simulation for reference.
+Run the whole regionalweatherapproaches.R script to generate simulation output images. This process takes **approximately 47 minutes** to generate images. The duration of each phase in the process are provided at the end of the simulation for reference.
 
 The script contains packages necessary to pre-processing, simulation, post-processing, and themes for plot visualization.
 
